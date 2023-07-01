@@ -74,6 +74,11 @@ publishing {
                         email.set("felixlaegeler@gmail.com")
                     }
                 }
+                scm {
+                    connection.set("scm:git:git@github.com:fxlae/typeid-java.git")
+                    developerConnection.set("scm:git:git@github.com:fxlae/typeid-java.git")
+                    url.set("https://github.com/fxlae/typeid-java/")
+                }
             }
         }
     }
