@@ -1,5 +1,7 @@
 # typeid-java
 
+[![CircleCI](https://circleci.com/gh/fxlae/typeid-java.svg?style=shield)](https://circleci.com/gh/fxlae/typeid-java)
+
 ## A Java implementation of [TypeID](https://github.com/jetpack-io/typeid).
 
 TypeIDs are a modern, **type-safe**, globally unique identifier based on the upcoming
