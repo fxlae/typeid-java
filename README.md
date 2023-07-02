@@ -9,6 +9,24 @@ UUIDv7 standard. They provide a ton of nice properties that make them a great ch
 as the primary identifiers for your data in a database, APIs, and distributed systems.
 Read more about TypeIDs in their [spec](https://github.com/jetpack-io/typeid).
 
+## Installation
+
+Maven:
+
+```xml
+<dependency>
+    <groupId>de.fxlae</groupId>
+    <artifactId>typeid-java</artifactId>
+    <version>0.1.0</version>
+</dependency>
+```
+
+Gradle:
+
+```kotlin
+implementation("de.fxlae:typeid-java:0.1.0")
+```
+
 ## Requirements
 - Java 8 or higher
 
