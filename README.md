@@ -1,6 +1,6 @@
 # typeid-java
 
-[![CircleCI](https://circleci.com/gh/fxlae/typeid-java.svg?style=shield)](https://circleci.com/gh/fxlae/typeid-java)
+![example workflow](https://github.com/fxlae/typeid-java/actions/workflows/build-on-push.yml/badge.svg)
 
 ## A Java implementation of [TypeID](https://github.com/jetpack-io/typeid).
 
@@ -8,6 +8,24 @@ TypeIDs are a modern, **type-safe**, globally unique identifier based on the upc
 UUIDv7 standard. They provide a ton of nice properties that make them a great choice
 as the primary identifiers for your data in a database, APIs, and distributed systems.
 Read more about TypeIDs in their [spec](https://github.com/jetpack-io/typeid).
+
+## Installation
+
+Maven:
+
+```xml
+<dependency>
+    <groupId>de.fxlae</groupId>
+    <artifactId>typeid-java</artifactId>
+    <version>0.1.0</version>
+</dependency>
+```
+
+Gradle:
+
+```kotlin
+implementation("de.fxlae:typeid-java:0.1.0")
+```
 
 ## Requirements
 - Java 8 or higher
@@ -36,13 +54,13 @@ typeId.getUuid(); // v4, java.util.UUID(9c8ec0e7-020b-4caf-87c0-38fb6c0ebbe2)
 
 Obtain an instance of `TypeID` from a text string (any UUID version):
 ```java
-TypeId typeId = TypeId.parse("01h455vb4pex5vsknk084sn02q")
-TypeId typeId = TypeId.parse("someprefix_01h455vb4pex5vsknk084sn02q")
+TypeId typeId = TypeId.parse("01h455vb4pex5vsknk084sn02q");
+TypeId typeId = TypeId.parse("someprefix_01h455vb4pex5vsknk084sn02q");
 ```
 
 ## Building From Source
 ```console
 foo@bar:~$ git clone https://github.com/fxlae/typeid-java.git
 foo@bar:~$ cd typeid-java
-foo@bar:~/typeid-java$ ./gradlew assemble
+foo@bar:~/typeid-java$ ./gradlew build
 ```

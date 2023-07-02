@@ -5,14 +5,14 @@ plugins {
 }
 
 group = "de.fxlae"
-version = "0.1.0"
+version = "0.1.1-SNAPSHOT"
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    api("com.fasterxml.uuid:java-uuid-generator:4.2.0")
+    implementation("com.fasterxml.uuid:java-uuid-generator:4.2.0")
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.15.2")
@@ -84,12 +84,19 @@ publishing {
     }
     repositories {
         maven {
-            url = uri(layout.buildDirectory.dir("repos/releases"))
+            name = "OSSRH"
+            val releasesRepoUrl = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+            val snapshotsRepoUrl = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+            url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
+            credentials(PasswordCredentials::class)
         }
     }
 }
 
 signing {
+    val signingKey: String? by project
+    val signingPassword: String? by project
+    useInMemoryPgpKeys(signingKey, signingPassword)
     sign(publishing.publications["mavenJava"])
 }
 
