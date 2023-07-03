@@ -50,4 +50,10 @@ public class TypeIdBench {
         bh.consume(typeId.toString());
     }
 
+    @Benchmark
+    public void ofAndToString(Blackhole bh, Inputs inputs) {
+        TypeId typeId = TypeId.of(inputs.prefix, inputs.uuid);
+        bh.consume(typeId.toString());
+    }
+
 }
