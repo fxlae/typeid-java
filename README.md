@@ -1,6 +1,6 @@
 # typeid-java
 
-![example workflow](https://github.com/fxlae/typeid-java/actions/workflows/build-on-push.yml/badge.svg)
+![License Info](https://img.shields.io/github/license/fxlae/typeid-java) ![Build Status](https://github.com/fxlae/typeid-java/actions/workflows/build-on-push.yml/badge.svg)
 
 ## A Java implementation of [TypeID](https://github.com/jetpack-io/typeid).
 
