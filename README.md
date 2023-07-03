@@ -31,9 +31,9 @@ implementation("de.fxlae:typeid-java:0.1.1")
 - Java 8 or higher
 
 ## Usage
-An instance of `TypeID` can be obtained in several ways. It is immutable and thread-safe. Examples:
+An instance of `TypeId` can be obtained in several ways. It is immutable and thread-safe. Examples:
 
-Generate a new `TypeID`, based on UUIDv7:
+Generate a new `TypeId`, based on UUIDv7:
 
 ```java
 TypeId typeId = TypeId.generate();
@@ -46,13 +46,13 @@ typeId.getPrefix(); // "someprefix"
 typeId.toString(); // "someprefix_01h455vb4pex5vsknk084sn02q"
 ```
 
-Construct a `TypeID` from arguments (any UUID version):
+Construct a `TypeId` from arguments (any UUID version):
 ```java
 TypeId typeId = TypeId.of("someprefix", UUID.randomUUID()); 
 typeId.getUuid(); // v4, java.util.UUID(9c8ec0e7-020b-4caf-87c0-38fb6c0ebbe2)
 ```
 
-Obtain an instance of `TypeID` from a text string (any UUID version):
+Obtain an instance of `TypeId` from a text string (any UUID version):
 ```java
 TypeId typeId = TypeId.parse("01h455vb4pex5vsknk084sn02q");
 TypeId typeId = TypeId.parse("someprefix_01h455vb4pex5vsknk084sn02q");
@@ -70,5 +70,13 @@ There is a small [JMH](https://github.com/openjdk/jmh) microbenchmark included:
 foo@bar:~/typeid-java$ ./gradlew jmh
 ```
 
+In a single-threaded run, all operations are in the range of millions of calls per second, which should be sufficient for the majority of use cases (used setup: Eclipse Temurin 17 OpenJDK 64-Bit Server VM, AMD 2019 gen. CPU @ 3.6Ghz, 16GiB memory).
+
+| method          |                  op/s |
+|-----------------|----------------------:|
+| `TypeId.generate` |             7.9M |
+| `TypeId.of`       |            44.2M |
+| `TypeId.parse`    |             7.2M |
+
 ## Third party dependencies
-- [java-uuid-generator](https://github.com/cowtowncoder/java-uuid-generator): The only dependency of this library, used for the generation of UUIDv7
+- [java-uuid-generator](https://github.com/cowtowncoder/java-uuid-generator): The only dependency (runtime) of this library, used for the generation of UUIDv7
