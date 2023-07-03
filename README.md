@@ -17,14 +17,14 @@ Maven:
 <dependency>
     <groupId>de.fxlae</groupId>
     <artifactId>typeid-java</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
 </dependency>
 ```
 
 Gradle:
 
 ```kotlin
-implementation("de.fxlae:typeid-java:0.1.0")
+implementation("de.fxlae:typeid-java:0.1.1")
 ```
 
 ## Requirements
