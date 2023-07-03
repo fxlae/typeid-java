@@ -64,3 +64,11 @@ foo@bar:~$ git clone https://github.com/fxlae/typeid-java.git
 foo@bar:~$ cd typeid-java
 foo@bar:~/typeid-java$ ./gradlew build
 ```
+
+There is a small [JMH](https://github.com/openjdk/jmh) microbenchmark included:
+```console
+foo@bar:~/typeid-java$ ./gradlew jmh
+```
+
+## Third party dependencies
+- [java-uuid-generator](https://github.com/cowtowncoder/java-uuid-generator): The only dependency of this library, used for the generation of UUIDv7

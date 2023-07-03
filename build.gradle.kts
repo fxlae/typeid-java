@@ -2,6 +2,7 @@ plugins {
     `java-library`
     `maven-publish`
     signing
+    id("me.champeau.jmh") version "0.7.1"
 }
 
 group = "de.fxlae"
@@ -98,5 +99,12 @@ signing {
     val signingPassword: String? by project
     useInMemoryPgpKeys(signingKey, signingPassword)
     sign(publishing.publications["mavenJava"])
+}
+
+jmh {
+    warmupIterations.set(3)
+    iterations.set(2)
+    threads.set(1)
+    fork.set(1)
 }
 
