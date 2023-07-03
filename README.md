@@ -72,11 +72,13 @@ foo@bar:~/typeid-java$ ./gradlew jmh
 
 In a single-threaded run, all operations are in the range of millions of calls per second, which should be sufficient for the majority of use cases (used setup: Eclipse Temurin 17 OpenJDK 64-Bit Server VM, AMD 2019 gen. CPU @ 3.6Ghz, 16GiB memory).
 
-| method          |                  op/s |
-|-----------------|----------------------:|
-| `TypeId.generate` |             7.9M |
-| `TypeId.of`       |            44.2M |
-| `TypeId.parse`    |             7.2M |
+| method                           |                  op/s |
+|----------------------------------|----------------------:|
+| `TypeId.generate`                |                 27.3M |
+| `TypeId.of`                      |                 44.4M |
+| `TypeId.parse`                   |                  7.2M |
+| `TypeId.toString`                |                 13.6M |
+| `TypeId.generate` + `toString`   |                  9.5M |
 
 ## Third party dependencies
-- [java-uuid-generator](https://github.com/cowtowncoder/java-uuid-generator): The only dependency (runtime) of this library, used for the generation of UUIDv7
+- [java-uuid-generator](https://github.com/cowtowncoder/java-uuid-generator): The only runtime dependency of this library, used for the generation of UUIDv7
