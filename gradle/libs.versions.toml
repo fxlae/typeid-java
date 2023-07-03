@@ -1,0 +1,18 @@
+[versions]
+java-uuid-generator = "4.2.0"
+jackson = "2.15.2"
+junit = "5.9.1"
+assertj = "3.24.2"
+shadow = "8.1.1"
+jmh = "0.7.1"
+
+[plugins]
+jmh = { id = "me.champeau.jmh", version.ref = "jmh" }
+
+[libraries]
+java-uuid-generator = { module = "com.fasterxml.uuid:java-uuid-generator", version.ref = "java-uuid-generator" }
+junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
+assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
+jackson-dataformat-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml", version.ref = "jackson" }
+shadow = { module = "com.github.johnrengelman.shadow:com.github.johnrengelman.shadow.gradle.plugin", version.ref = "shadow" }
+
