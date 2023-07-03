@@ -12,7 +12,7 @@ repositories {
 }
 
 dependencies {
-    api("com.fasterxml.uuid:java-uuid-generator:4.2.0")
+    implementation("com.fasterxml.uuid:java-uuid-generator:4.2.0")
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.15.2")
