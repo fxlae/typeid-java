@@ -2,6 +2,7 @@ plugins {
     `java-library`
     `maven-publish`
     signing
+    jacoco
     id("me.champeau.jmh") version "0.7.1"
 }
 
@@ -25,6 +26,7 @@ tasks.compileJava {
 
 tasks.test {
     useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport)
 }
 
 tasks.jar {

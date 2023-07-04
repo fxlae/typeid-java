@@ -36,26 +36,27 @@ An instance of `TypeId` can be obtained in several ways. It is immutable and thr
 Generate a new `TypeId`, based on UUIDv7:
 
 ```java
-TypeId typeId = TypeId.generate();
+var typeId = TypeId.generate();
 typeId.getPrefix(); // ""
 typeId.getUuid(); // v7, java.util.UUID(01890a5d-ac96-774b-bcce-b302099a8057)
 typeId.toString(); // "01h455vb4pex5vsknk084sn02q"
 
-TypeId typeId = TypeId.generate("someprefix");
+var typeId = TypeId.generate("someprefix");
 typeId.getPrefix(); // "someprefix"
 typeId.toString(); // "someprefix_01h455vb4pex5vsknk084sn02q"
 ```
 
 Construct a `TypeId` from arguments (any UUID version):
 ```java
-TypeId typeId = TypeId.of("someprefix", UUID.randomUUID()); 
+var typeId = TypeId.of("someprefix", UUID.randomUUID()); 
 typeId.getUuid(); // v4, java.util.UUID(9c8ec0e7-020b-4caf-87c0-38fb6c0ebbe2)
 ```
 
 Obtain an instance of `TypeId` from a text string (any UUID version):
 ```java
-TypeId typeId = TypeId.parse("01h455vb4pex5vsknk084sn02q");
-TypeId typeId = TypeId.parse("someprefix_01h455vb4pex5vsknk084sn02q");
+var typeId = TypeId.parse("01h455vb4pex5vsknk084sn02q");
+
+var typeId = TypeId.parse("someprefix_01h455vb4pex5vsknk084sn02q");
 ```
 
 ## Building From Source

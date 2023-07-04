@@ -129,12 +129,20 @@ class TypeIdTest {
             "someprefix_01h455lb4pex5vsknk084sn02q", // suffix with 'l'
             "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss_01h455vb4pex5vsknk084sn02q", // prefix with 64 chars
             "someprefix_01h455vb4pex5vsknk084sn02", // suffix with 25 chars
-            "someprefix_01h455vb4pex5vsknk084sn02q2" // suffix with 27 chars
+            "someprefix_01h455vb4pex5vsknk084sn02q2", // suffix with 27 chars
+            "someprefix_81h455vb4pex5vsknk084sn02q" // leftmost suffix char is != 0-7
     })
-    void parseForInvalidInputShouldFail(String input) {
+    void parseWithInvalidInputShouldFail(String input) {
         assertThrows(
                 IllegalArgumentException.class,
                 () -> TypeId.parse(input));
+    }
+
+    @Test
+    void parseWithNullInputShouldFail() {
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> TypeId.parse(null));
     }
 
     @Test
@@ -149,6 +157,41 @@ class TypeIdTest {
         TypeId typeId = TypeId.of(SOME_UUID);
         assertNotNull(typeId);
         assertEquals(SOME_SUFFIX, typeId.toString());
+    }
+
+    @Test
+    void equalsShouldSucceedForEqualTypeIds() {
+
+        TypeId typeIdA = TypeId.of(SOME_UUID);
+        TypeId typeIdB = TypeId.of(SOME_UUID);
+
+        // reflexivity
+        assertEquals(typeIdA, typeIdA);
+
+        // symmetry
+        assertTrue(typeIdA.equals(typeIdB));
+        assertTrue(typeIdB.equals(typeIdA));
+    }
+
+    @Test
+    void equalsShouldFailForAnythingElse() {
+
+        TypeId typeIdA = TypeId.of(SOME_UUID);
+        TypeId typeIdB = TypeId.of("different", SOME_UUID);
+        TypeId typeIdC = TypeId.of(UUID.fromString("00000000-0000-0000-0000-000000000000"));
+        Object otherType = new Object();
+
+        assertFalse(typeIdA.equals(typeIdB));
+        assertFalse(typeIdA.equals(typeIdC));
+        assertFalse(typeIdA.equals(null));
+        assertFalse(typeIdA.equals(otherType));
+    }
+
+    @Test
+    void hashCodeShouldBeTheSameForSameTypeIds() {
+        TypeId typeIdA = TypeId.of(SOME_UUID);
+        TypeId typeIdB = TypeId.of(SOME_UUID);
+        assertEquals(typeIdA.hashCode(), typeIdB.hashCode());
     }
 
 }
