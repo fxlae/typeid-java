@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "de.fxlae"
-version = "0.1.2"
+version = "0.2.0-SNAPSHOT"
 
 java {
     withJavadocJar()
@@ -107,9 +107,9 @@ publishing {
     }
 }
 
-//signing {
-//    val signingKey: String? by project
-//    val signingPassword: String? by project
-//    useInMemoryPgpKeys(signingKey, signingPassword)
-//    sign(publishing.publications["mavenJava"])
-//}
+signing {
+    val signingKey: String? by project
+    val signingPassword: String? by project
+    useInMemoryPgpKeys(signingKey, signingPassword)
+    sign(publishing.publications["mavenJava"])
+}
