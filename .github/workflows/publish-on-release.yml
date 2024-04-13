@@ -13,9 +13,8 @@ jobs:
           distribution: temurin
           java-version: 17
       - uses: gradle/actions/setup-gradle@v3
-        with:
-          gradle-version: wrapper
-          arguments: build publishAllPublicationsToOSSRHRepository
+      - run: ./gradlew build
+      - run: ./gradlew publishAllPublicationsToOSSRHRepository
     env:
       ORG_GRADLE_PROJECT_OSSRHUsername: ${{ secrets.OSSRH_USERNAME }}
       ORG_GRADLE_PROJECT_OSSRHPassword: ${{ secrets.OSSRH_TOKEN }}
