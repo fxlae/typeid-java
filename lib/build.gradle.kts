@@ -5,14 +5,11 @@ plugins {
 }
 
 tasks.compileJava {
-    options.release.set(17)
+    options.release = 17
 }
 
 dependencies {
-    "provided"(project(":lib:shared"))
     implementation(libs.java.uuid.generator)
-    testImplementation(project(path = ":lib:shared", configuration = "testArtifacts"))
-    jmh(project(":lib:shared"))
 }
 
 jmh {
