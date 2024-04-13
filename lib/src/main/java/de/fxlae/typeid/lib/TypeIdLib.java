@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public final class TypeIdLib {
 
-    public static final String VALID_REF = "VALID_REF";
+    public static final String VALID_REF = "";
     private static final char SEPARATOR = '_';
     private static final int PREFIX_MAX_LENGTH = 63;
     private static final String SUFFIX_ALPHABET = "0123456789abcdefghjkmnpqrstvwxyz";
@@ -219,7 +219,7 @@ public final class TypeIdLib {
 
         for (int i = 0; i < separatorIndex; i++) {
             char c = input.charAt(i);
-            if (!(c >= 'a' && c <= 'z')) {
+            if (!(c >= 'a' && c <= 'z') /* && c != '_' */) {
                 return "Illegal character in prefix, must be one of [a-z]";
             }
         }

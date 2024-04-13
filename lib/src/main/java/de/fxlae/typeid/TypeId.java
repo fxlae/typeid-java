@@ -84,70 +84,6 @@ public record TypeId(String prefix, UUID uuid) {
     }
 
     /**
-     * Parses the textual representation of a TypeID and returns a {@link TypeId} instance.
-     *
-     * @param text the textual representation.
-     * @return the new {@link TypeId}.
-     * @throws NullPointerException     if the text is null
-     * @throws IllegalArgumentException if the text is invalid
-     */
-    public static TypeId parse(final String text) {
-
-        int separatorIndex = TypeIdLib.findSeparatorIndex(text);
-        String err = TypeIdLib.validateInput(text, separatorIndex);
-
-        if (err != TypeIdLib.VALID_REF) {
-            throw new IllegalArgumentException(err);
-        }
-
-        return new TypeId(
-                TypeIdLib.extractPrefix(text, separatorIndex),
-                TypeIdLib.decodeSuffixOnInput(text, separatorIndex));
-    }
-
-    /**
-     * Parses the textual representation of a TypeID and returns an {@link Optional}.
-     *
-     * @param text the textual representation of the TypeID
-     * @return an {@link Optional} containing a {@link TypeId} or an empty {@link TypeId} in case of validation errors
-     * @throws NullPointerException if the text is null
-     */
-    public static Optional<TypeId> parseToOptional(final String text) {
-
-        int separatorIndex = TypeIdLib.findSeparatorIndex(text);
-        String err = TypeIdLib.validateInput(text, separatorIndex);
-
-        if (err != TypeIdLib.VALID_REF) {
-            return Optional.empty();
-        }
-
-        return Optional.of(new TypeId(
-                TypeIdLib.extractPrefix(text, separatorIndex),
-                TypeIdLib.decodeSuffixOnInput(text, separatorIndex)));
-    }
-
-    /**
-     * Parses the textual representation of a TypeID and returns a {@link Validated}.
-     *
-     * @param text the textual representation of the TypeID
-     * @return a valid {@link Validated} containing a {@link TypeId} or an invalid {@link Validated} with an error message
-     * @throws NullPointerException if the text is null
-     */
-    public static Validated<TypeId> parseToValidated(final String text) {
-
-        int separatorIndex = TypeIdLib.findSeparatorIndex(text);
-        String err = TypeIdLib.validateInput(text, separatorIndex);
-
-        if (err != TypeIdLib.VALID_REF) {
-            return Validated.invalid(err);
-        }
-
-        return Validated.valid(new TypeId(
-                TypeIdLib.extractPrefix(text, separatorIndex),
-                TypeIdLib.decodeSuffixOnInput(text, separatorIndex)));
-    }
-
-    /**
      * Parses the textual representation of a TypeID and executes a handler {@link Function}, depending
      * on the outcome. Both provided functions must have the same return type.
      *
@@ -180,6 +116,42 @@ public record TypeId(String prefix, UUID uuid) {
         return okHandler.apply(typeId);
     }
 
+    /**
+     * Parses the textual representation of a TypeID and returns a {@link TypeId} instance.
+     *
+     * @param text the textual representation.
+     * @return the new {@link TypeId}.
+     * @throws NullPointerException     if the text is null
+     * @throws IllegalArgumentException if the text is invalid
+     */
+    public static TypeId parse(final String text) {
+        return parse(text, Function.identity(),
+                message -> {
+                    throw new IllegalArgumentException(message);
+                });
+    }
+
+    /**
+     * Parses the textual representation of a TypeID and returns an {@link Optional}.
+     *
+     * @param text the textual representation of the TypeID
+     * @return an {@link Optional} containing a {@link TypeId} or an empty {@link TypeId} in case of validation errors
+     * @throws NullPointerException if the text is null
+     */
+    public static Optional<TypeId> parseToOptional(final String text) {
+        return parse(text, Optional::of, message -> Optional.empty());
+    }
+
+    /**
+     * Parses the textual representation of a TypeID and returns a {@link Validated}.
+     *
+     * @param text the textual representation of the TypeID
+     * @return a valid {@link Validated} containing a {@link TypeId} or an invalid {@link Validated} with an error message
+     * @throws NullPointerException if the text is null
+     */
+    public static Validated<TypeId> parseToValidated(final String text) {
+        return parse(text, Validated::valid, Validated::invalid);
+    }
 
     /**
      * Returns the textual representation of this {@link TypeId}.
@@ -190,5 +162,4 @@ public record TypeId(String prefix, UUID uuid) {
     public String toString() {
         return encode(prefix, uuid);
     }
-
 }
