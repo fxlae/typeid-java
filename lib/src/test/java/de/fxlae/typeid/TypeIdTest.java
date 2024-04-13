@@ -156,7 +156,7 @@ class TypeIdTest {
     @Test
     void parseWithNullInputShouldFail() {
         assertThrows(
-                NullPointerException.class,
+                IllegalArgumentException.class,
                 () -> TypeId.parse(null));
     }
 
@@ -179,7 +179,7 @@ class TypeIdTest {
                 error -> error);
 
         assertNotNull(result);
-        assertEquals("Illegal character in prefix, must be one of [a-z]", result);
+        assertEquals("Illegal character in prefix, must be one of [a-z_]", result);
     }
 
     @Test

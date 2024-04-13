@@ -3,8 +3,12 @@ package de.fxlae.typeid.lib;
 import com.fasterxml.uuid.Generators;
 import com.fasterxml.uuid.impl.TimeBasedEpochGenerator;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.Objects;
 import java.util.UUID;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public final class TypeIdLib {
 
@@ -56,7 +60,7 @@ public final class TypeIdLib {
     private TypeIdLib() {
     }
 
-    public static UUID decodeSuffixOnInput(final String input, final int separatorIndex) {
+    private static UUID decodeSuffixOnInput(final String input, final int separatorIndex) {
 
         final int start = (separatorIndex == -1) ? 0 : separatorIndex + 1;
 
@@ -149,11 +153,41 @@ public final class TypeIdLib {
         return sb.toString();
     }
 
-    public static int findSeparatorIndex(String input) {
-        return (input == null) ? -1 : input.lastIndexOf(SEPARATOR);
+    public static <T> T parse(
+            String text,
+            BiFunction<String, UUID, T> successHandler,
+            Function<String, T> errorHandler) {
+
+        requireNonNull(successHandler);
+        requireNonNull(errorHandler);
+
+        if (text == null || text.isEmpty()) {
+            return errorHandler.apply("Provided TypeId must not be null or empty");
+        }
+
+        var separatorIndex = text.lastIndexOf(SEPARATOR);
+
+        // empty prefix, but with unexpected separator
+        if (separatorIndex == 0) {
+            return errorHandler.apply("TypeId with empty prefix must not contain the separator '_'");
+        }
+
+        var suffixValidation = validateSuffixOnInput(text, separatorIndex);
+        if (suffixValidation != VALID_REF) {
+            return errorHandler.apply(suffixValidation);
+        }
+
+        var prefixValidation = validatePrefixOnInput(text, separatorIndex);
+        if (prefixValidation != TypeIdLib.VALID_REF) {
+            return errorHandler.apply(prefixValidation);
+        }
+
+        return successHandler.apply(
+                extractPrefix(text, separatorIndex),
+                decodeSuffixOnInput(text, separatorIndex));
     }
 
-    public static String extractPrefix(String input, int separatorIndex) {
+    private static String extractPrefix(String input, int separatorIndex) {
         if (separatorIndex == -1) {
             return "";
         } else {
@@ -161,31 +195,10 @@ public final class TypeIdLib {
         }
     }
 
-    public static String validateInput(String input, int separatorIndex) {
-
-        Objects.requireNonNull(input);
-
-        if (input.isEmpty()) {
-            return "Provided TypeId must not be empty";
-        }
-
-        // empty prefix, but with unexpected separator
-        if (separatorIndex == 0) {
-            return "TypeId with empty prefix must not contain the separator '_'";
-        }
-
-        String suffixErr = validateSuffixOnInput(input, separatorIndex);
-        if (suffixErr != VALID_REF) {
-            return suffixErr;
-        }
-
-        return validatePrefixOnInput(input, separatorIndex);
-    }
-
     // validates the suffix without creating an intermediary object for it
     private static String validateSuffixOnInput(final String input, final int separatorIndex) {
 
-        final int start = (separatorIndex != -1) ? separatorIndex + 1 : 0;
+        final var start = (separatorIndex != -1) ? separatorIndex + 1 : 0;
 
         if (input.length() - start != SUFFIX_LENGTH) {
             return "Suffix with illegal length, must be " + SUFFIX_LENGTH;
@@ -196,7 +209,7 @@ public final class TypeIdLib {
         }
 
         for (int i = start; i < input.length(); i++) {
-            char c = input.charAt(i);
+            var c = input.charAt(i);
             if (c >= SUFFIX_LOOKUP.length || SUFFIX_LOOKUP[c] == NOOP) {
                 return "Illegal character in suffix, must be one of [" + SUFFIX_ALPHABET + "]";
             }
@@ -205,8 +218,17 @@ public final class TypeIdLib {
         return VALID_REF;
     }
 
+    public static void requireValidPrefix(final String prefix) {
+        Objects.requireNonNull(prefix);
+        if (prefix.isEmpty()) return;
+        var prefixValidation = validatePrefixOnInput(prefix, prefix.length());
+        if (prefixValidation != TypeIdLib.VALID_REF) {
+            throw new IllegalArgumentException(prefixValidation);
+        }
+    }
+
     // validates the prefix without creating an intermediary object for it
-    public static String validatePrefixOnInput(final String input, final int separatorIndex) {
+    private static String validatePrefixOnInput(final String input, final int separatorIndex) {
 
         // empty prefix, no separator
         if (separatorIndex == -1) {
@@ -217,10 +239,14 @@ public final class TypeIdLib {
             return "Prefix with illegal length, must not have more than " + PREFIX_MAX_LENGTH + " characters";
         }
 
+        if (input.charAt(0) == SEPARATOR || input.charAt(input.length() - 1) == SEPARATOR) {
+            return "Prefix must not start or end with '" + SEPARATOR + "'";
+        }
+
         for (int i = 0; i < separatorIndex; i++) {
             char c = input.charAt(i);
-            if (!(c >= 'a' && c <= 'z') /* && c != '_' */) {
-                return "Illegal character in prefix, must be one of [a-z]";
+            if (!(c >= 'a' && c <= 'z') && c != SEPARATOR) {
+                return "Illegal character in prefix, must be one of [a-z" + SEPARATOR + "]";
             }
         }
 

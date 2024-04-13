@@ -3,15 +3,9 @@ package de.fxlae.typeid;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
 
-import java.util.Optional;
 import java.util.UUID;
 
 public class TypeIdBench {
-
-    @Benchmark
-    public void parse(Blackhole bh, Inputs inputs) {
-        bh.consume(TypeId.parse(inputs.validTypeId));
-    }
 
     @Benchmark
     public void of(Blackhole bh, Inputs inputs) {
@@ -41,31 +35,51 @@ public class TypeIdBench {
     }
 
     @Benchmark
-    public void parseWithErrorAsException(Blackhole bh, Inputs inputs) {
+    public void parseSuccess(Blackhole bh, Inputs inputs) {
+        bh.consume(TypeId.parse(inputs.validTypeId));
+    }
+
+    @Benchmark
+    public void parseWithHandlersSuccess(Blackhole bh, Inputs inputs) {
+        bh.consume(TypeId.parse(inputs.validTypeId,
+                typeId -> typeId,
+                error -> error));
+    }
+
+    @Benchmark
+    public void parseToOptionalSuccess(Blackhole bh, Inputs inputs) {
+        bh.consume(TypeId.parseToOptional(inputs.validTypeId));
+    }
+
+    @Benchmark
+    public void parseToValidatedSuccess(Blackhole bh, Inputs inputs) {
+        bh.consume(TypeId.parseToValidated(inputs.validTypeId));
+    }
+
+    @Benchmark
+    public void parseError(Blackhole bh, Inputs inputs) {
         try {
             TypeId.parse(inputs.invalidTypeId);
-        } catch (IllegalArgumentException e) {
-            bh.consume(e.getMessage());
+        } catch (Exception e) {
+            bh.consume(e);
         }
     }
 
     @Benchmark
-    public void parseWithErrorAsValue(Blackhole bh, Inputs inputs) {
-        String result = TypeId.parse(inputs.invalidTypeId,
-                typeId -> null,
-                message -> message);
-        bh.consume(result);
+    public void parseWithHandlersError(Blackhole bh, Inputs inputs) {
+        bh.consume(TypeId.parse(inputs.invalidTypeId,
+                typeId -> typeId,
+                error -> error));
     }
 
+    @Benchmark
+    public void parseToOptionalError(Blackhole bh, Inputs inputs) {
+        bh.consume(TypeId.parseToOptional(inputs.invalidTypeId));
+    }
 
-    public void xx(Blackhole bh, Inputs inputs) {
-        var maybeTypeId = TypeId.parse(inputs.invalidTypeId,
-                Optional::of,
-                message -> {
-                    System.out.println(message);
-                    return Optional.empty();
-                });
-        bh.consume(maybeTypeId);
+    @Benchmark
+    public void parseToValidatedError(Blackhole bh, Inputs inputs) {
+        bh.consume(TypeId.parseToValidated(inputs.invalidTypeId));
     }
 
     @State(Scope.Benchmark)
