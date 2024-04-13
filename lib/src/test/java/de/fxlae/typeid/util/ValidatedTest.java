@@ -197,5 +197,4 @@ class ValidatedTest {
         assertThatThrownBy(() -> VALID_VALIDATED.ifInvalid(null)).isInstanceOf(NullPointerException.class);
         assertThatThrownBy(() -> INVALID_VALIDATED.ifInvalid(null)).isInstanceOf(NullPointerException.class);
     }
-
 }

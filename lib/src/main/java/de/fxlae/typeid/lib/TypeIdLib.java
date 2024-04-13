@@ -174,12 +174,12 @@ public final class TypeIdLib {
             return "TypeId with empty prefix must not contain the separator '_'";
         }
 
-        String suffixErr = TypeIdLib.validateSuffixOnInput(input, separatorIndex);
-        if (suffixErr != TypeIdLib.VALID_REF) {
+        String suffixErr = validateSuffixOnInput(input, separatorIndex);
+        if (suffixErr != VALID_REF) {
             return suffixErr;
         }
 
-        return TypeIdLib.validatePrefixOnInput(input, separatorIndex);
+        return validatePrefixOnInput(input, separatorIndex);
     }
 
     // validates the suffix without creating an intermediary object for it
