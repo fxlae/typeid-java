@@ -54,11 +54,12 @@ typeId.uuid(); // java.util.UUID(01890a5d-ac96-774b-bcce-b302099a8057), based on
 
 #### of
 
-To construct (or reconstruct) a `TypeId` from existing arguments, which can also be used as an "extension point" to plug-in custom UUID generators:
+To construct (or reconstruct) a `TypeId` from existing arguments:
 
 ```java
-var typeId = TypeId.of("user", UUID.randomUUID()); // a TypeId based on UUIDv4
+var typeId = TypeId.of("user", someUuid);
 ```
+As a side effect, `of` can also be used as an "extension point" to plug-in custom UUID generators.
 ### Parsing TypeID strings
 
 For parsing, the library supports both an imperative programming model and a more functional style.
