@@ -1,10 +1,12 @@
 package de.fxlae.typeid;
 
+import de.fxlae.typeid.lib.TypeIdLibTest;
 import de.fxlae.typeid.util.Validated;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.ArgumentsSource;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -121,41 +123,53 @@ class TypeIdTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {
-            "01h455vb4pex5vsknk084sn02q", // suffix only
-            "abcdefghijklmnopqrstuvw_01h455vb4pex5vsknk084sn02q", // prefix with allowed chars
-            "some_prefix_01h455vb4pex5vsknk084sn02q", // prefix with underscore
-            "sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss_01h455vb4pex5vsknk084sn02q" // prefix with 63 chars
-    })
-    void parseWithValidInputsShouldReturnTypeId(String input) {
-        var typeId = TypeId.parse(input);
-        assertNotNull(typeId);
+    @ArgumentsSource(TypeIdLibTest.ValidTypeIdProvider.class)
+    void parseWithValidInputsShouldReturnTypeId(String typeIdAsString, String expectedPrefix, UUID expectedUuid) {
+        var typeId = TypeId.parse(typeIdAsString);
+        assertThat(typeId.prefix()).isEqualTo(expectedPrefix);
+        assertThat(typeId.uuid()).isEqualTo(expectedUuid);
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {
-            "",
-            "_",
-            "someprefix_", // no suffix at all
-            "_01h455vb4pex5vsknk084sn02q", // suffix only, but with preceding underscore
-            "__01h455vb4pex5vsknk084sn02q", // prefix is single underscore
-            "_someprefix_01h455vb4pex5vsknk084sn02q", // prefix starts with underscore
-            "someprefix__01h455vb4pex5vsknk084sn02q", // prefix ends with underscore
-            "_someprefix__01h455vb4pex5vsknk084sn02q", // prefix starts and ends with underscore
-            "sömeprefix_01h455vb4pex5vsknk084sn02q", // prefix with 'ö'
-            "someprefix_01h455öb4pex5vsknk084sn02q", // suffix with 'ö'
-            "sOmeprefix_01h455vb4pex5vsknk084sn02q", // prefix with 'O'
-            "someprefix_01h455Vb4pex5vsknk084sn02q", // suffix with 'V'
-            "someprefix_01h455lb4pex5vsknk084sn02q", // suffix with 'l'
-            "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss_01h455vb4pex5vsknk084sn02q", // prefix with 64 chars
-            "someprefix_01h455vb4pex5vsknk084sn02", // suffix with 25 chars
-            "someprefix_01h455vb4pex5vsknk084sn02q2", // suffix with 27 chars
-            "someprefix_81h455vb4pex5vsknk084sn02q" // leftmost suffix char is != 0-7
-    })
-    void parseWithInvalidInputShouldFail(String input) {
+    @ArgumentsSource(TypeIdLibTest.InvalidTypeIdProvider.class)
+    void parseWithInvalidInputShouldThrow(String typeIdAsString) {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> TypeId.parse(input));
+                () -> TypeId.parse(typeIdAsString));
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(TypeIdLibTest.ValidTypeIdProvider.class)
+    void parseToOptionalWithValidInputsShouldReturnOptionalWithTypeId(String typeIdAsString, String expectedPrefix, UUID expectedUuid) {
+        var maybeTypeId = TypeId.parseToOptional(typeIdAsString);
+        assertThat(maybeTypeId).isNotEmpty();
+        assertThat(maybeTypeId.get().prefix()).isEqualTo(expectedPrefix);
+        assertThat(maybeTypeId.get().uuid()).isEqualTo(expectedUuid);
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(TypeIdLibTest.InvalidTypeIdProvider.class)
+    void parseToOptionalWithInvalidInputShouldReturnEmptyOptional(String typeIdAsString) {
+        assertThat(TypeId.parseToOptional(typeIdAsString)).isEmpty();
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(TypeIdLibTest.ValidTypeIdProvider.class)
+    void parseToValidatedWithValidInputsShouldReturnValid(String typeIdAsString, String expectedPrefix, UUID expectedUuid) {
+        var validatedTypeId = TypeId.parseToValidated(typeIdAsString);
+        assertThat(validatedTypeId.isValid()).isTrue();
+        assertThat(validatedTypeId.get().prefix()).isEqualTo(expectedPrefix);
+        assertThat(validatedTypeId.get().uuid()).isEqualTo(expectedUuid);
+        assertThrows(NoSuchElementException.class, validatedTypeId::message);
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(TypeIdLibTest.InvalidTypeIdProvider.class)
+    void parseToValidatedWithInvalidInputsShouldReturnInvalid(String typeIdAsString) {
+        var validatedTypeId = TypeId.parseToValidated(typeIdAsString);
+        assertThat(validatedTypeId.isValid()).isFalse();
+        assertThat(validatedTypeId.message()).isNotEmpty();
+        assertThrows(NoSuchElementException.class, validatedTypeId::get);
     }
 
     @Test

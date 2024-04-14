@@ -239,7 +239,7 @@ public final class TypeIdLib {
             return "Prefix with illegal length, must not have more than " + PREFIX_MAX_LENGTH + " characters";
         }
 
-        if (input.charAt(0) == SEPARATOR || input.charAt(input.length() - 1) == SEPARATOR) {
+        if (input.charAt(0) == SEPARATOR || input.charAt(separatorIndex - 1) == SEPARATOR) {
             return "Prefix must not start or end with '" + SEPARATOR + "'";
         }
 

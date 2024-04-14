@@ -6,9 +6,11 @@ import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ArgumentsProvider;
+import org.junit.jupiter.params.provider.ArgumentsSource;
 
 import java.io.IOException;
 import java.util.List;
@@ -24,44 +26,25 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * and
  * <a href="https://github.com/jetpack-io/typeid/blob/main/spec/invalid.yml">invalid.yml</a>.
  */
-class SpecTest {
-
-    private static Stream<Arguments> provideSpecValid() throws IOException {
-        return loadSpec("/spec/valid.yml", SpecValid.class)
-                .stream()
-                .map(s -> Arguments.of(s.name, s.typeid, s.prefix, UUID.fromString(s.uuid)));
-    }
-
-    private static Stream<Arguments> provideSpecInvalid() throws IOException {
-        return loadSpec("/spec/invalid.yml", SpecInvalid.class)
-                .stream()
-                .map(s -> Arguments.of(s.name, s.typeid, s.description));
-    }
-
-    static <T> List<T> loadSpec(String path, Class<T> clazz) throws IOException {
-        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-        CollectionType javaType = mapper.getTypeFactory()
-                .constructCollectionType(List.class, clazz);
-        return mapper.readValue(SpecTest.class.getResourceAsStream(path), javaType);
-    }
+public class SpecTest {
 
     @ParameterizedTest
-    @MethodSource("provideSpecValid")
-    void testEncodeAgainstSpecValid(String name, String typeIdAsString, String prefix, UUID uuid) {
+    @ArgumentsSource(SpecValidProvider.class)
+    void testEncodeAgainstSpecValid(String name, String expectedTypeIdAsString, String prefix, UUID uuid) {
         var typeId = TypeId.of(prefix, uuid);
-        assertEquals(typeIdAsString, typeId.toString());
+        assertEquals(expectedTypeIdAsString, typeId.toString());
     }
 
     @ParameterizedTest
-    @MethodSource("provideSpecValid")
-    void testDecodeAgainstSpecValid(String name, String typeIdAsString, String prefix, UUID uuid) {
+    @ArgumentsSource(SpecValidProvider.class)
+    void testDecodeAgainstSpecValid(String name, String typeIdAsString, String expectedPrefix, UUID expectedUuid) {
         var typeId = TypeId.parse(typeIdAsString);
-        assertEquals(prefix, typeId.prefix());
-        assertEquals(uuid, typeId.uuid());
+        assertEquals(expectedPrefix, typeId.prefix());
+        assertEquals(expectedUuid, typeId.uuid());
     }
 
     @ParameterizedTest
-    @MethodSource("provideSpecInvalid")
+    @ArgumentsSource(SpecInvalidProvider.class)
     void testDecodeAgainstSpecInvalid(String name, String typeIdAsString, String description) {
         Assertions.assertThrows(IllegalArgumentException.class, () -> TypeId.parse(typeIdAsString), description);
     }
@@ -79,6 +62,31 @@ class SpecTest {
             assertEquals("test", typeId2.prefix());
             assertEquals(uuid, typeId2.uuid());
         }
+    }
+
+    public static class SpecValidProvider implements ArgumentsProvider {
+        @Override
+        public Stream<? extends Arguments> provideArguments(ExtensionContext context) throws IOException {
+            return loadSpec("/spec/valid.yml", SpecValid.class)
+                    .stream()
+                    .map(s -> Arguments.of(s.name, s.typeid, s.prefix, UUID.fromString(s.uuid)));
+        }
+    }
+
+    public static class SpecInvalidProvider implements ArgumentsProvider {
+        @Override
+        public Stream<? extends Arguments> provideArguments(ExtensionContext context) throws IOException {
+            return loadSpec("/spec/invalid.yml", SpecInvalid.class)
+                    .stream()
+                    .map(s -> Arguments.of(s.name, s.typeid, s.description));
+        }
+    }
+
+    static <T> List<T> loadSpec(String path, Class<T> clazz) throws IOException {
+        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+        CollectionType javaType = mapper.getTypeFactory()
+                .constructCollectionType(List.class, clazz);
+        return mapper.readValue(SpecTest.class.getResourceAsStream(path), javaType);
     }
 
     @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)

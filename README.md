@@ -106,9 +106,9 @@ Note: Checking `validated.isValid` is advisable for untrusted input. Similar to 
 
 var report = switch(TypeId.parseToValidated("...")) {
     case Valid(TypeId(var prefix, var uuid)) when "user".equals(prefix) -> "user with UUID" + uuid;
-    case Valid(TypeId(var prefix, _)) -> "Not a user, ignore the UUID. Prefix is " + prefix;
+    case Valid(TypeId(var prefix, var ignored)) -> "Not a user. Prefix is " + prefix;
     case Invalid(var message) -> "Parsing failed :( ... " + message;
-}
+};
 ```
 Note the absent (and superfluous) default case. Exhaustiveness is checked during compilation!
 
@@ -119,7 +119,7 @@ Another safe alternative for working with `Validated<TypeId>` involves methods t
 
 ```java
 // transform
-var mappedToPrefix = TypeId.parseToValidated("dog_01h455vb4pex5vsknk084sn02q");
+var mappedToPrefix = TypeId.parseToValidated("dog_01h455vb4pex5vsknk084sn02q")
     .map(TypeId::prefix)  // Validated<TypeId> -> Validated<String>
     .filter("Not a cat! :(", prefix -> !"cat".equals(prefix)); // the predicate fails
 
