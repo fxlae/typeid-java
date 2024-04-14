@@ -123,7 +123,8 @@ class TypeIdTest {
     @ParameterizedTest
     @ValueSource(strings = {
             "01h455vb4pex5vsknk084sn02q", // suffix only
-            "abcdefghijklmnopqrstuvw_01h455vb4pex5vsknk084sn02q", // prefix with all allowed chars
+            "abcdefghijklmnopqrstuvw_01h455vb4pex5vsknk084sn02q", // prefix with allowed chars
+            "some_prefix_01h455vb4pex5vsknk084sn02q", // prefix with underscore
             "sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss_01h455vb4pex5vsknk084sn02q" // prefix with 63 chars
     })
     void parseWithValidInputsShouldReturnTypeId(String input) {
@@ -137,6 +138,10 @@ class TypeIdTest {
             "_",
             "someprefix_", // no suffix at all
             "_01h455vb4pex5vsknk084sn02q", // suffix only, but with preceding underscore
+            "__01h455vb4pex5vsknk084sn02q", // prefix is single underscore
+            "_someprefix_01h455vb4pex5vsknk084sn02q", // prefix starts with underscore
+            "someprefix__01h455vb4pex5vsknk084sn02q", // prefix ends with underscore
+            "_someprefix__01h455vb4pex5vsknk084sn02q", // prefix starts and ends with underscore
             "sömeprefix_01h455vb4pex5vsknk084sn02q", // prefix with 'ö'
             "someprefix_01h455öb4pex5vsknk084sn02q", // suffix with 'ö'
             "sOmeprefix_01h455vb4pex5vsknk084sn02q", // prefix with 'O'

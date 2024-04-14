@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * This class tests against the specification published on
  * <a href="https://github.com/jetpack-io/typeid/tree/main/spec">github.com/jetpack-io/typeid</a>,
- * especially against <a href="https://github.com/jetpack-io/typeid/blob/main/spec/valid.yml">valid.yml</a>
+ * specifically against <a href="https://github.com/jetpack-io/typeid/blob/main/spec/valid.yml">valid.yml</a>
  * and
  * <a href="https://github.com/jetpack-io/typeid/blob/main/spec/invalid.yml">invalid.yml</a>.
  */
