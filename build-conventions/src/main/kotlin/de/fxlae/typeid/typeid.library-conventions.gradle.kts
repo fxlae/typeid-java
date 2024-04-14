@@ -2,11 +2,10 @@ plugins {
     `java-library`
     `maven-publish`
     signing
-    id("com.github.johnrengelman.shadow")
 }
 
 group = "de.fxlae"
-version = "0.2.0"
+version = "0.3.0"
 
 java {
     withJavadocJar()
@@ -30,41 +29,8 @@ tasks.javadoc {
     }
 }
 
-tasks.named("jar").configure {
-    enabled = false
-}
-
-tasks.withType<GenerateModuleMetadata> {
-    enabled = false
-}
-
 val mavenArtifactId: String by project
 val mavenArtifactDescription: String by project
-
-tasks {
-    shadowJar {
-        configurations = listOf(project.configurations.compileClasspath.get())
-        include("de/fxlae/**")
-        from(project(":lib:shared").sourceSets.main.get().output)
-        archiveClassifier.set("")
-        archiveBaseName.set(mavenArtifactId)
-    }
-    build {
-        dependsOn(shadowJar)
-    }
-}
-
-val providedConfigurationName = "provided"
-
-configurations {
-    create(providedConfigurationName)
-}
-
-sourceSets {
-    main.get().compileClasspath += configurations.getByName(providedConfigurationName)
-    test.get().compileClasspath += configurations.getByName(providedConfigurationName)
-    test.get().runtimeClasspath += configurations.getByName(providedConfigurationName)
-}
 
 publishing {
     publications {

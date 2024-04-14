@@ -3,4 +3,4 @@ pluginManagement {
 }
 
 rootProject.name = "typeid-java"
-include("lib:shared", "lib:java8", "lib:java17")
+include("lib")
