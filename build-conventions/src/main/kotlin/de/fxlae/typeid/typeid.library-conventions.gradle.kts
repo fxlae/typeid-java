@@ -29,14 +29,6 @@ tasks.javadoc {
     }
 }
 
-tasks.named("jar").configure {
-    enabled = false
-}
-
-tasks.withType<GenerateModuleMetadata> {
-    enabled = false
-}
-
 val mavenArtifactId: String by project
 val mavenArtifactDescription: String by project
 
