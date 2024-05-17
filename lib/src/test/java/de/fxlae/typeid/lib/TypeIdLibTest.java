@@ -36,13 +36,14 @@ public class TypeIdLibTest {
                     "",
                     "_",
                     "someprefix_", // no suffix at all
-                    "_01h455vb4pex5vsknk084sn02q", // suffix only, but with preceding underscore
+                    "_01h455vb4pex5vsknk084sn02q", // suffix only, but with the preceding underscore
                     "__01h455vb4pex5vsknk084sn02q", // prefix is single underscore
                     "_someprefix_01h455vb4pex5vsknk084sn02q", // prefix starts with underscore
                     "someprefix__01h455vb4pex5vsknk084sn02q", // prefix ends with underscore
                     "_someprefix__01h455vb4pex5vsknk084sn02q", // prefix starts and ends with underscore
                     "sömeprefix_01h455vb4pex5vsknk084sn02q", // prefix with 'ö'
                     "someprefix_01h455öb4pex5vsknk084sn02q", // suffix with 'ö'
+                    "someprefix_Ă01h455b4pex5vsknk084sn02q", // suffix with 'Ă' (> ascii 255) as first char
                     "sOmeprefix_01h455vb4pex5vsknk084sn02q", // prefix with 'O'
                     "someprefix_01h455Vb4pex5vsknk084sn02q", // suffix with 'V'
                     "someprefix_01h455lb4pex5vsknk084sn02q", // suffix with 'l'

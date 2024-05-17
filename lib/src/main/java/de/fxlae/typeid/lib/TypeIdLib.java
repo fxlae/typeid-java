@@ -204,7 +204,8 @@ public final class TypeIdLib {
             return "Suffix with illegal length, must be " + SUFFIX_LENGTH;
         }
 
-        if (((SUFFIX_LOOKUP[input.charAt(start)] >>> 3) & 0x3) > 0) {
+        final char firstChar = input.charAt(start);
+        if ((firstChar < '0' || firstChar > '7')) {
             return "Illegal leftmost suffix character, must be one of [01234567]";
         }
 
