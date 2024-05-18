@@ -148,6 +148,7 @@ public abstract class AbstractTypeIdTest {
             "_01h455vb4pex5vsknk084sn02q", // suffix only, but with preceding underscore
             "sömeprefix_01h455vb4pex5vsknk084sn02q", // prefix with 'ö'
             "someprefix_01h455öb4pex5vsknk084sn02q", // suffix with 'ö'
+            "someprefix_Ă01h455b4pex5vsknk084sn02q", // suffix with 'Ă' (> ascii 255) as first char
             "sOmeprefix_01h455vb4pex5vsknk084sn02q", // prefix with 'O'
             "someprefix_01h455Vb4pex5vsknk084sn02q", // suffix with 'V'
             "someprefix_01h455lb4pex5vsknk084sn02q", // suffix with 'l'
