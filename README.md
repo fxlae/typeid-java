@@ -24,14 +24,14 @@ To install via Maven:
 <dependency>
     <groupId>de.fxlae</groupId>
     <artifactId>typeid-java</artifactId>
-    <version>0.3.0</version>
+    <version>0.3.1</version>
 </dependency>
 ```
 
 For installation via Gradle:
 
 ```kotlin
-implementation("de.fxlae:typeid-java:0.3.0")
+implementation("de.fxlae:typeid-java:0.3.1")
 ```
 
 ## Usage
