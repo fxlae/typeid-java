@@ -22,14 +22,14 @@ To install via Maven:
 <dependency>
     <groupId>de.fxlae</groupId>
     <artifactId>typeid-java</artifactId> <!-- or 'typeid-java-jdk8' -->
-    <version>0.2.0</version>
+    <version>0.2.1</version>
 </dependency>
 ```
 
 For installation via Gradle:
 
 ```kotlin
-implementation("de.fxlae:typeid-java:0.2.0") // or ...typeid-java-jdk8:0.2.0
+implementation("de.fxlae:typeid-java:0.2.1") // or ...typeid-java-jdk8:0.2.1
 ```
 
 ## Usage
