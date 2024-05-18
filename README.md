@@ -15,7 +15,7 @@ Starting with version `0.3.0`, `typeid-java` requires at least Java 17.
 
 <details>
 <summary>(Details on Java 8+ support)</summary>
-Up to version 0.2.0, a separate artifact called `typeid-java-jdk8` was published, supporting Java versions 8 and higher, and covering all relevant use cases, albeit with less syntactic sugar. If you are running Java 8 through 16, you can still use `typeid-java-jdk8:0.2.0`, which is still available and remains fully functional. However, it will no longer receive updates and is limited to the TypeId spec version 0.2.0.
+Up to version 0.2.x, a separate artifact called `typeid-java-jdk8` was published, supporting Java versions 8 and higher, and covering all relevant use cases, albeit with less syntactic sugar. If you are running Java 8 through 16, you can still use `typeid-java-jdk8:0.2.x`, which is still available and remains fully functional. However, it will no longer receive updates and is limited to the TypeId spec version 0.2.0.
 </details>
 
 To install via Maven:
