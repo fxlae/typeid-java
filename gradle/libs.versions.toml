@@ -1,10 +1,10 @@
 [versions]
-java-uuid-generator = "4.2.0"
-jackson = "2.15.2"
-junit = "5.9.1"
-assertj = "3.24.2"
+java-uuid-generator = "5.0.0"
+jackson = "2.17.0"
+junit = "5.10.2"
+assertj = "3.25.3"
 shadow = "8.1.1"
-jmh = "0.7.1"
+jmh = "0.7.2"
 
 [plugins]
 jmh = { id = "me.champeau.jmh", version.ref = "jmh" }

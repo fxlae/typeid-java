@@ -20,5 +20,5 @@ artifacts {
 }
 
 dependencies {
-    implementation("com.fasterxml.uuid:java-uuid-generator:4.2.0")
+    implementation("com.fasterxml.uuid:java-uuid-generator:5.0.0")
 }
